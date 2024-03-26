@@ -523,7 +523,6 @@ impl Window {
             let _: () = msg_send![*window, setRestorable: NO];
 
             window.setReleasedWhenClosed_(NO);
-            window.setBackgroundColor_(cocoa::appkit::NSColor::clearColor(nil));
 
             // We could set this, but it makes the entire window, including
             // its titlebar, opaque to this fixed degree.
@@ -1079,6 +1078,11 @@ impl WindowInner {
         };
         unsafe {
             self.window.setOpaque_(is_opaque);
+
+            if !is_opaque {
+                self.window.setBackgroundColor_(cocoa::appkit::NSColor::clearColor(nil));
+            }
+
             // when transparent, also turn off the window shadow,
             // because having the shadow enabled seems to correlate
             // with ghostly remnants see:
